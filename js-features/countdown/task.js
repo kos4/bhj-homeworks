@@ -13,7 +13,7 @@ class Timer {
         this.timer = 0;
         alert('Вы победили в конкурсе');
         clearInterval(this.intervalId);
-        window.location.href = "/js-features/countdown/download.test";
+        window.location.href = "/bhj-homeworks/js-features/countdown/download.test";
       }
 
       //this.element.textContent = this.timer;
