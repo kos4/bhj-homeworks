@@ -4,6 +4,9 @@ class Game {
     this.wordElement = container.querySelector('.word');
     this.winsElement = container.querySelector('.status__wins');
     this.lossElement = container.querySelector('.status__loss');
+    this.timerElement = container.querySelector('.timer');
+    this.timerWorld = 0;
+    this.timerId = null;
 
     this.reset();
 
@@ -17,14 +20,29 @@ class Game {
   }
 
   registerEvents() {
-    /*
-      TODO:
-      Написать обработчик события, который откликается
-      на каждый введённый символ.
-      В случае правильного ввода символа вызываем this.success()
-      При неправильном вводе символа - this.fail();
-      DOM-элемент текущего символа находится в свойстве this.currentSymbol.
-     */
+    document.addEventListener('keyup', e => {
+      if (e.key.toLowerCase() === this.currentSymbol.textContent.toLowerCase()) {
+        this.success();
+      } else {
+        this.fail();
+      }
+    });
+  }
+
+  timer() {
+    clearInterval(this.timerId);
+    this.timerWorld = this.wordElement.textContent.length;
+    this.timerElement.textContent = this.timerWorld;
+    this.timerId = setInterval(() => {
+      this.timerWorld -= 1;
+      this.timerElement.textContent = this.timerWorld;
+
+      if (this.timerWorld === 0) {
+        this.fail();
+        this.timerWorld = this.wordElement.textContent.length;
+        this.timerElement.textContent = this.timerWorld;
+      }
+    }, 1000);
   }
 
   success() {
@@ -56,6 +74,7 @@ class Game {
     const word = this.getWord();
 
     this.renderWord(word);
+    this.timer();
   }
 
   getWord() {
