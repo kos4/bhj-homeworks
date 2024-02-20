@@ -52,10 +52,26 @@ const sendAnswer = (questionId, answerId, element) => {
 
 const setQuestionResult = (element, response) => {
   element.textContent = '';
+  const sumResult = getSumResult(response.stat);
   response.stat.forEach(item => {
     const elementResult = document.createElement('div');
     elementResult.className = 'poll__result';
-    elementResult.innerHTML = `${item.answer}: <b>${item.votes}</b>`;
+    elementResult.innerHTML = `${item.answer}: <b>${getResultPercent(sumResult, item.votes)}%</b>`;
     element.append(elementResult);
   });
+};
+
+const getSumResult = result => {
+  return result.reduce((acc, item) => acc += item.votes, 0);
+};
+
+const getResultPercent = (sum, value) => {
+  let n = 2;
+  value = Number(value) * 100 / sum;
+
+  if (value % 1 === 0) {
+    n = 0;
+  }
+
+  return value.toFixed(n);
 };
