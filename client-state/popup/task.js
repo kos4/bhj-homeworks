@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   showModal();
-
 });
 
 const showModal = () => {
@@ -33,7 +32,7 @@ const setCookie = (name, value, second = 0, path = '', domain = '') => {
 };
 
 const deleteCookie = name => {
-  const date = new Date (Date.now() - 1000000).toUTCString();
+  const date = new Date (1).toUTCString();
   document.cookie = `${name}=; Expires=${date}`;
 };
 

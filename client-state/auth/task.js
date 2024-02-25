@@ -15,31 +15,37 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', e => {
     e.preventDefault();
 
+    const btn = form.querySelector('#signin__btn');
+    btn.setAttribute('disabled', '');
     const formData = new FormData(form);
     const xhr = new XMLHttpRequest();
     xhr.open('POST', form.action);
+    xhr.responseType = 'json';
     xhr.send(formData);
 
-    xhr.addEventListener('readystatechange', () => {
-      if (xhr.readyState === xhr.DONE) {
-        let response = xhr.responseText;
+    xhr.addEventListener('load', () => {
+      let response = xhr.response;
 
-        try {
-          response = JSON.parse(response);
-        } catch (e) {}
-
-        if (xhr.status.toString()[0] === '2') {
-          if (response.success) {
-            user_id = response['user_id'];
-            accessLogin(user_id, form, nodeWelcome);
-            localStorage.setItem('user_id', user_id);
-          } else {
-            alert('Неверный логин/пароль');
-          }
+      if (xhr.status.toString()[0] === '2') {
+        if (response.success) {
+          user_id = response['user_id'];
+          accessLogin(user_id, form, nodeWelcome);
+          localStorage.setItem('user_id', user_id);
         } else {
-          alert(response.message);
+          alert('Неверный логин/пароль');
         }
+      } else {
+        alert(response.message);
       }
+    });
+
+    xhr.addEventListener('error', () => {
+      alert(`Во время выполнения запроса произошла ошибка ${xhr.status}. ${xhr.statusText}.`);
+      console.log(xhr);
+    });
+
+    xhr.addEventListener('loadend', () => {
+      btn.removeAttribute('disabled');
     });
   });
 });

@@ -7,11 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 const setTextTextEditor = nodeTextEditor => {
-  const text = localStorage.getItem('textEditor');
-
-  if (text) {
-    nodeTextEditor.value = text;
-  }
+  nodeTextEditor.value = localStorage.getItem('textEditor');
 };
 
 const saveTextTextEditor = nodeTextEditor => {

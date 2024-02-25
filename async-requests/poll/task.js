@@ -5,13 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
 const getQuestion = () => {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://students.netoservices.ru/nestjs-backend/poll');
+  xhr.responseType = 'json';
   xhr.send();
-  xhr.addEventListener('readystatechange', () => {
-    if (xhr.readyState === xhr.DONE) {
-      const response = JSON.parse(xhr.responseText);
-      setQuestionTitle(response.data.title);
-      setQuestionAnswers(response);
-    }
+  xhr.addEventListener('load', () => {
+    setQuestionTitle(xhr.response.data.title);
+    setQuestionAnswers(xhr.response);
   });
 };
 
@@ -41,12 +39,10 @@ const sendAnswer = (questionId, answerId, element) => {
   const xhr = new XMLHttpRequest();
   xhr.open('POST', 'https://students.netoservices.ru/nestjs-backend/poll');
   xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  xhr.responseType = 'json';
   xhr.send(`vote=${questionId}&answer=${answerId}`);
-  xhr.addEventListener('readystatechange', () => {
-    if (xhr.readyState === xhr.DONE) {
-      const response = JSON.parse(xhr.responseText);
-      setQuestionResult(element, response);
-    }
+  xhr.addEventListener('load', () => {
+    setQuestionResult(element, xhr.response);
   });
 };
 
